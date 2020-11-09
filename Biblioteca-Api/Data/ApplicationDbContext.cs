@@ -9,7 +9,7 @@ namespace Biblioteca_Api.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
@@ -17,6 +17,12 @@ namespace Biblioteca_Api.Data
         {
             modelBuilder.Entity<AutorLibro>().HasKey(x => new { x.IdAutor, x.IdLibro });
             modelBuilder.Entity<Prestamo>().HasKey(x => new { x.LibroId, x.UsuarioId });
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
             base.OnModelCreating(modelBuilder);
         }
 
