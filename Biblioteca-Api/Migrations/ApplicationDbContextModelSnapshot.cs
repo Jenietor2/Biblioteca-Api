@@ -19,23 +19,6 @@ namespace Biblioteca_Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Biblioteca_Api.Models.Autor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(70)")
-                        .HasMaxLength(70);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Autores");
-                });
-
             modelBuilder.Entity("Biblioteca_Api.Models.Genero", b =>
                 {
                     b.Property<int>("Id")
@@ -66,8 +49,8 @@ namespace Biblioteca_Api.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
 
-                    b.Property<int>("AutorId")
-                        .HasColumnType("int");
+                    b.Property<string>("Autor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -75,21 +58,23 @@ namespace Biblioteca_Api.Migrations
                     b.Property<int>("GeneroId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Ruta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnType("nvarchar(120)")
                         .HasMaxLength(120);
 
-                    b.Property<int>("UsuarioID")
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AutorId");
-
                     b.HasIndex("GeneroId");
 
-                    b.HasIndex("UsuarioID");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Libros");
                 });
@@ -172,12 +157,6 @@ namespace Biblioteca_Api.Migrations
 
             modelBuilder.Entity("Biblioteca_Api.Models.Libro", b =>
                 {
-                    b.HasOne("Biblioteca_Api.Models.Autor", "Autor")
-                        .WithMany("Libros")
-                        .HasForeignKey("AutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Biblioteca_Api.Models.Genero", "Genero")
                         .WithMany("Libros")
                         .HasForeignKey("GeneroId")
@@ -186,7 +165,7 @@ namespace Biblioteca_Api.Migrations
 
                     b.HasOne("Biblioteca_Api.Models.Usuario", "Usuario")
                         .WithMany("Libros")
-                        .HasForeignKey("UsuarioID")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Biblioteca_Api.Data;
+using Biblioteca_Api.Servicios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,10 @@ namespace Biblioteca_Api
         {
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+            services.AddHttpContextAccessor();
+
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
@@ -43,6 +48,8 @@ namespace Biblioteca_Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 

@@ -2,10 +2,13 @@
 using Biblioteca_Api.Data;
 using Biblioteca_Api.DTOs;
 using Biblioteca_Api.Models;
+using Biblioteca_Api.Servicios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -18,11 +21,14 @@ namespace Biblioteca_Api.Controllers
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
+        private readonly IAlmacenadorArchivos almacenador;
+        private readonly string contenedor = "Libros";
 
-        public LibroController(ApplicationDbContext context, IMapper mapper)
+        public LibroController(ApplicationDbContext context, IMapper mapper, IAlmacenadorArchivos almacenador)
         {
             this.context = context;
             this.mapper = mapper;
+            this.almacenador = almacenador;
         }
         [HttpGet]
         public async Task<ActionResult<List<LibroDTO>>> Get()
@@ -48,23 +54,52 @@ namespace Biblioteca_Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] LibroCreacionDTO libroCreacionDTO)
+        public async Task<ActionResult> Post([FromForm] LibroCreacionDTO libroCreacionDTO)
         {
             Libro libro = mapper.Map<Libro>(libroCreacionDTO);
-            context.Add(libro);
 
+            if(libroCreacionDTO.RutaLibro != null)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await libroCreacionDTO.RutaLibro.CopyToAsync(memoryStream);
+                    byte[] contenido = memoryStream.ToArray();
+                    string extencion = Path.GetExtension(libroCreacionDTO.RutaLibro.FileName);
+                    libro.Ruta = await almacenador.GuardarArchivo(contenido, extencion, contenedor, libroCreacionDTO.RutaLibro.ContentType);
+                }
+            }
+
+            context.Add(libro);
             await context.SaveChangesAsync();
+
             LibroDTO libroDTO = mapper.Map<LibroDTO>(libro);
 
             return new CreatedAtRouteResult("obtenerLibro", new { id = libroDTO.Id }, libroDTO);
         }
 
         [HttpPut("actualizar/{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] LibroDTO libroDTO)
+        public async Task<ActionResult> Put(int id, [FromBody] LibroCreacionDTO libroCreacionDTO)
         {
-            Libro libro = mapper.Map<Libro>(libroDTO);
-            libro.Id = id;
-            context.Entry(libro).State = EntityState.Modified;
+            Libro libroBD = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.Activo);
+
+            if(libroBD == null)
+            {
+                return NotFound();
+            }
+
+            libroBD = mapper.Map<Libro>(libroCreacionDTO);
+
+            if (libroCreacionDTO.RutaLibro != null)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await libroCreacionDTO.RutaLibro.CopyToAsync(memoryStream);
+                    byte[] contenido = memoryStream.ToArray();
+                    string extencion = Path.GetExtension(libroCreacionDTO.RutaLibro.FileName);
+                    libroBD.Ruta = await almacenador.EditarArchivo(contenido, extencion, contenedor, libroBD.Ruta, libroCreacionDTO.RutaLibro.ContentType);
+                }
+            }
+
             await context.SaveChangesAsync();
             return NoContent();
         }

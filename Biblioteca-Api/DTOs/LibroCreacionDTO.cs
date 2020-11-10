@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Biblioteca_Api.Validaciones;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,10 +14,15 @@ namespace Biblioteca_Api.DTOs
         [StringLength(120)]
         public string Titulo { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public int AutorId { get; set; }
-        public AutorDTO Autor { get; set; }
+        public string Autor { get; set; }
         public bool Activo { get; set; } = true;
         public int GeneroId { get; set; }
         public GeneroDTO Genero { get; set; }
+        public int UsuarioId { get; set; }
+        public UsuarioDTO Usuario { get; set; }
+        [PesoArchivoValidacion(pesoMaximoEnMegaBytes: 20)]
+        [TipoArchivoValidacion(grupoTipoArchivo: GrupoTipoArchivo.Texto)]
+        public IFormFile RutaLibro { get; set; }
+
     }
 }
