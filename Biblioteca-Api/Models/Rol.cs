@@ -15,8 +15,7 @@ namespace Biblioteca_Api.Models
         [Required]
         [StringLength(200)]
         public string Descripcion { get; set; }
-        public int EstadoId { get; set; }
-        public Estado Estado { get; set; }
         public List<Usuario> Usuarios { get; set; }
+        public bool Activo { get; set; } = true;
     }
 }

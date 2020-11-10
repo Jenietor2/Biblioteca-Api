@@ -6,18 +6,13 @@ using System.Threading.Tasks;
 
 namespace Biblioteca_Api.Models
 {
-    public class Estado
+    public class Genero
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(25)]
+        [StringLength(40)]
         public string Nombre { get; set; }
-        [Required]
-        [MaxLength(200)]
-        public string Descripcion { get; set; }
         public List<Libro> Libros { get; set; }
-        public List<Usuario> Usuarios { get; set; }
-        public List<Prestamo> Prestamos { get; set; }
-        public List<Rol> Roles { get; set; }
+        public bool Activo { get; set; } = true;
     }
 }

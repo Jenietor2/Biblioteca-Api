@@ -27,7 +27,7 @@ namespace Biblioteca_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<LibroDTO>>> Get()
         {
-            List<Libro> lstLibro = await context.Libros.Where(x => x.EstadoId == 1).ToListAsync();
+            List<Libro> lstLibro = await context.Libros.Where(x => x.Activo).ToListAsync();
             List<LibroDTO> lstLibroDto = mapper.Map<List<LibroDTO>>(lstLibro);
 
             return lstLibroDto;
@@ -36,7 +36,7 @@ namespace Biblioteca_Api.Controllers
         [HttpGet("{id:int}", Name = "obtenerLibro")]
         public async Task<ActionResult<LibroDTO>> Get(int id)
         {
-            Libro libro = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.EstadoId == 1);
+            Libro libro = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.Activo);
 
             if (libro == null)
             {
@@ -72,14 +72,14 @@ namespace Biblioteca_Api.Controllers
         [HttpPut("eliminar/{id}")]
         public async Task<ActionResult> Eliminacion(int id)
         {
-            Libro libro = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.EstadoId == 1);
+            Libro libro = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.Activo);
 
             if (libro == null)
             {
                 return NotFound();
             }
 
-            libro.EstadoId = 2;
+            libro.Activo = false;
             context.Entry(libro).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();

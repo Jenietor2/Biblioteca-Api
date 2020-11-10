@@ -12,12 +12,14 @@ namespace Biblioteca_Api.Models
         [Required]
         [StringLength(120)]
         public string Titulo { get; set; }
-        public DateTime FechaPublicacion { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public string Genero { get; set; }
-        public List<AutorLibro> AutorLibros { get; set; }
-        public int EstadoId { get; set; }
-        public Estado Estado { get; set; }
-        public List<Prestamo> Prestamos { get; set; }
+        public int AutorId { get; set; }
+        public Autor Autor { get; set; }
+        public bool Activo { get; set; } = true;
+        public int GeneroId { get; set; }
+        public Genero Genero { get; set; }
+        public int UsuarioID { get; set; }
+        public Usuario Usuario { get; set; }
+
     }
 }

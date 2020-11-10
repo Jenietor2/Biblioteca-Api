@@ -10,8 +10,8 @@ namespace Biblioteca_Api.Models
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(70)]
         public string Nombre { get; set; }
-        public List<AutorLibro> AutorLibros { get; set; }
+        public List<Libro> Libros { get; set; }
     }
 }

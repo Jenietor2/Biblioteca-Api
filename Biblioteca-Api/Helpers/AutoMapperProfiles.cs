@@ -14,10 +14,8 @@ namespace Biblioteca_Api.Helpers
         {
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
             CreateMap<Libro, LibroDTO>().ReverseMap();
-            CreateMap<Estado, EstadoDTO>().ReverseMap();
             CreateMap<Rol, RolDTO>().ReverseMap();
             CreateMap<Autor, AutorDTO>().ReverseMap();
-            CreateMap<AutorLibro, AutorLibroDTO>().ReverseMap();
             CreateMap<UsuarioCreacionDTO, Usuario>();
             CreateMap<LibroCreacionDTO, Libro>();
         }

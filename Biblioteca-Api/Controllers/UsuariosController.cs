@@ -32,10 +32,12 @@ namespace Biblioteca_Api.Controllers
             List<UsuarioDTO> lstUsuariosDTO = mapper.Map<List<UsuarioDTO>>(lstUsuarios);
             return lstUsuariosDTO;
         }
+
         [HttpGet("{id:int}", Name = "obtenerUsuario")]
         public async Task<ActionResult<UsuarioDTO>> Get(int id)
         {
-            Usuario usuario = await context.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+            Usuario usuario = await context.Usuarios.Include(x => x.Rol).
+                FirstOrDefaultAsync(x => x.Id == id && x.Activo == true);
 
             if (usuario == null)
             {
@@ -45,6 +47,7 @@ namespace Biblioteca_Api.Controllers
             UsuarioDTO usuarioDTO = mapper.Map<UsuarioDTO>(usuario);
             return usuarioDTO;
         }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UsuarioCreacionDTO usuarioCreacionDTO)
         {
@@ -74,7 +77,7 @@ namespace Biblioteca_Api.Controllers
                 return NotFound();
             }
 
-            usuario.EstadoId = 2;
+            usuario.Activo = false;
             context.Entry(usuario).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();

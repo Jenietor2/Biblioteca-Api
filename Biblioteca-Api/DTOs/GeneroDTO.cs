@@ -6,18 +6,13 @@ using System.Threading.Tasks;
 
 namespace Biblioteca_Api.DTOs
 {
-    public class EstadoDTO
+    public class GeneroDTO
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(25)]
+        [StringLength(40)]
         public string Nombre { get; set; }
-        [Required]
-        [MaxLength(200)]
-        public string Descripcion { get; set; }
         public List<LibroDTO> Libros { get; set; }
-        public List<UsuarioDTO> Usuarios { get; set; }
-        public List<PrestamoDTO> Prestamos { get; set; }
-        public List<RolDTO> Roles { get; set; }
+        public bool Activo { get; set; } = true;
     }
 }

@@ -4,14 +4,16 @@ using Biblioteca_Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Biblioteca_Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201110115450_nuevaBD")]
+    partial class nuevaBD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,16 +82,11 @@ namespace Biblioteca_Api.Migrations
                         .HasColumnType("nvarchar(120)")
                         .HasMaxLength(120);
 
-                    b.Property<int>("UsuarioID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AutorId");
 
                     b.HasIndex("GeneroId");
-
-                    b.HasIndex("UsuarioID");
 
                     b.ToTable("Libros");
                 });
@@ -181,12 +178,6 @@ namespace Biblioteca_Api.Migrations
                     b.HasOne("Biblioteca_Api.Models.Genero", "Genero")
                         .WithMany("Libros")
                         .HasForeignKey("GeneroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Biblioteca_Api.Models.Usuario", "Usuario")
-                        .WithMany("Libros")
-                        .HasForeignKey("UsuarioID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

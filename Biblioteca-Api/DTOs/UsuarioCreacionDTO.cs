@@ -26,10 +26,9 @@ namespace Biblioteca_Api.DTOs
         [StringLength(80)]
         public string Email { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public int EstadoId { get; set; }
-        public Estado Estado { get; set; }
         public int RolId { get; set; }
-        public Rol Rol { get; set; }
-        public List<Prestamo> Prestamos { get; set; }
+        public RolDTO Rol { get; set; }
+        public bool Activo { get; set; }
+        public List<LibroDTO> Libros { get; set; }
     }
 }

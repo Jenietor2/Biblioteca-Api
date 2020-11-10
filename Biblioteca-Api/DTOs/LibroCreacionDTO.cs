@@ -11,12 +11,11 @@ namespace Biblioteca_Api.DTOs
         [Required]
         [StringLength(120)]
         public string Titulo { get; set; }
-        public DateTime FechaPublicacion { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public string Genero { get; set; }
-        public List<AutorLibroDTO> AutorLibros { get; set; }
-        public int EstadoId { get; set; }
-        public EstadoDTO Estado { get; set; }
-        public List<PrestamoDTO> Prestamos { get; set; }
+        public int AutorId { get; set; }
+        public AutorDTO Autor { get; set; }
+        public bool Activo { get; set; } = true;
+        public int GeneroId { get; set; }
+        public GeneroDTO Genero { get; set; }
     }
 }

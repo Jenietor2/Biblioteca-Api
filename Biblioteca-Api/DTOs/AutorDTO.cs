@@ -10,8 +10,8 @@ namespace Biblioteca_Api.DTOs
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(70)]
         public string Nombre { get; set; }
-        public List<AutorLibroDTO> AutorLibros { get; set; }
+        public List<LibroDTO> Libros { get; set; }
     }
 }

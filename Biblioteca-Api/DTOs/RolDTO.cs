@@ -15,8 +15,7 @@ namespace Biblioteca_Api.DTOs
         [Required]
         [StringLength(200)]
         public string Descripcion { get; set; }
-        public int EstadoId { get; set; }
-        public EstadoDTO Estado { get; set; }
         public List<UsuarioDTO> Usuarios { get; set; }
+        public bool Activo { get; set; } = true;
     }
 }
