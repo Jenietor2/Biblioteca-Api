@@ -36,8 +36,7 @@ namespace Biblioteca_Api.Controllers
         [HttpGet("{id:int}", Name = "obtenerUsuario")]
         public async Task<ActionResult<UsuarioDTO>> Get(int id)
         {
-            Usuario usuario = await context.Usuarios.Include(x => x.Rol).
-                FirstOrDefaultAsync(x => x.Id == id && x.Activo == true);
+            Usuario usuario = await context.Usuarios.FirstOrDefaultAsync(x => x.Id == id && x.Activo == true);
 
             if (usuario == null)
             {
@@ -52,7 +51,10 @@ namespace Biblioteca_Api.Controllers
         public async Task<ActionResult> Post([FromBody] UsuarioCreacionDTO usuarioCreacionDTO)
         {
             Usuario usuario = mapper.Map<Usuario>(usuarioCreacionDTO);
-            context.Add(usuario);
+            usuario.Activo = !usuario.Activo ? true : usuario.Activo;
+            usuario.RolId = usuario.RolId <= 0 ? 2 : usuario.RolId;
+            usuario.FechaCreacion = usuario.FechaCreacion <= DateTime.MinValue ? DateTime.Now : usuario.FechaCreacion;
+            context.Add(usuario); 
             await context.SaveChangesAsync();
             UsuarioDTO usuarioDTO = mapper.Map<UsuarioDTO>(usuario);
             return new CreatedAtRouteResult("obtenerUsuario", new { id = usuarioDTO.Id }, usuarioDTO);

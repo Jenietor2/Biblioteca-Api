@@ -18,7 +18,6 @@ namespace Biblioteca_Api.Models
         [Required]
         [StringLength(18)]
         public string NumeroDocumento { get; set; }
-        public DateTime FechaNacimiento { get; set; }
         [Required]
         [StringLength(80)]
         public string Direccion { get; set; }
