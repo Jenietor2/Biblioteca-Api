@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Biblioteca_Api.DTOs
 {
-    public class UsuarioCreacionDTO
+    public class UsuarioActualizacion 
     {
         [Required]
         [StringLength(80)]
@@ -21,13 +21,5 @@ namespace Biblioteca_Api.DTOs
         [Required]
         [StringLength(80)]
         public string Direccion { get; set; }
-        [Required]
-        [StringLength(80)]
-        public string Email { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public int RolId { get; set; }
-        public RolDTO Rol { get; set; }
-        public bool Activo { get; set; }
-        public List<LibroDTO> Libros { get; set; }
     }
 }

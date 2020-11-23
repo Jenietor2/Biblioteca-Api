@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Biblioteca_Api.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,7 @@ namespace Biblioteca_Api.DTOs
         public int GeneroId { get; set; }
         public GeneroDTO Genero { get; set; }
         public int UsuarioID { get; set; }
-        public UsuarioDTO Usuario { get; set; }
+        public Usuario Usuario { get; set; }
         [Required]
         public string Ruta { get; set; }
     }

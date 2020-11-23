@@ -12,10 +12,9 @@ namespace Biblioteca_Api.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+            //CreateMap<Usuario, UsuarioDTO>().ReverseMap();
             CreateMap<Libro, LibroDTO>().ReverseMap();
-            CreateMap<Rol, RolDTO>().ReverseMap();
-            CreateMap<UsuarioCreacionDTO, Usuario>();
+            //CreateMap<UsuarioCreacionDTO, Usuario>();
             CreateMap<LibroCreacionDTO, Libro>().ForMember(x => x.Ruta, options => options.Ignore()); 
         }
     }

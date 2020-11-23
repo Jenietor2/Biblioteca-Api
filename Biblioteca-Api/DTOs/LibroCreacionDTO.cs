@@ -1,4 +1,5 @@
-﻿using Biblioteca_Api.Validaciones;
+﻿using Biblioteca_Api.Models;
+using Biblioteca_Api.Validaciones;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Biblioteca_Api.DTOs
         public int GeneroId { get; set; }
         public GeneroDTO Genero { get; set; }
         public int UsuarioId { get; set; }
-        public UsuarioDTO Usuario { get; set; }
+        public Usuario Usuario { get; set; }
         [PesoArchivoValidacion(pesoMaximoEnMegaBytes: 20)]
         [TipoArchivoValidacion(grupoTipoArchivo: GrupoTipoArchivo.Texto)]
         public IFormFile RutaLibro { get; set; }

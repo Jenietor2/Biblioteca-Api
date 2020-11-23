@@ -1,32 +1,25 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Biblioteca_Api.Models
 {
-    public class Usuario
+    public class Usuario : IdentityUser
     {
-        public int Id { get; set; }
-        [Required]
         [StringLength(80)]
         public string Nombres { get; set; }
-        [Required]
         [StringLength(80)]
         public string Apellidos { get; set; }
-        [Required]
         [StringLength(18)]
         public string NumeroDocumento { get; set; }
-        [Required]
         [StringLength(80)]
         public string Direccion { get; set; }
-        [Required]
-        [StringLength(80)]
-        public string Email { get; set; }
+        public string Password { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public int RolId { get; set; }
-        public Rol Rol { get; set; }
         public bool Activo { get; set; }
         public List<Libro> Libros { get; set; }
     }

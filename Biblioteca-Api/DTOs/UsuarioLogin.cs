@@ -1,0 +1,16 @@
+﻿using Biblioteca_Api.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Biblioteca_Api.DTOs
+{
+    public class UsuarioLogin 
+    {
+        [StringLength(80)]
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}
