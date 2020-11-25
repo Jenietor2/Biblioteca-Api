@@ -19,7 +19,7 @@ namespace Biblioteca_Api.DTOs
         public bool Activo { get; set; } = true;
         public int GeneroId { get; set; }
         public GeneroDTO Genero { get; set; }
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
         [PesoArchivoValidacion(pesoMaximoEnMegaBytes: 20)]
         [TipoArchivoValidacion(grupoTipoArchivo: GrupoTipoArchivo.Texto)]

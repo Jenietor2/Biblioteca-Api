@@ -1,4 +1,5 @@
 ﻿using Biblioteca_Api.DTOs;
+using Biblioteca_Api.Helpers;
 using Biblioteca_Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -42,12 +43,23 @@ namespace Biblioteca_Api.Controllers
 
             if (result.Succeeded)
             {
-                UsuarioLogin usuarioLogin = new UsuarioLogin { 
-                Email = model.Email,
-                 Password = model.Password
+                UsuarioLogin usuarioLogin = new UsuarioLogin
+                {
+                    Email = model.Email,
+                    Password = model.Password
                 };
 
-                return BuildToken(usuarioLogin, new List<string>());
+                EditarRolDTO editRolDTO = new EditarRolDTO {
+                    UsuarioId = model.Id,
+                    NombreRol = _configuration["RolDefault"].ToString()
+                };
+
+                Users user = new Users(_userManager);
+                await user.AsignarRolUsuario(editRolDTO);
+
+                List<string> lstRols = new List<string>();
+                lstRols.Add(editRolDTO.NombreRol);
+                return BuildToken(usuarioLogin, lstRols);
             }
             else
             {
@@ -108,21 +120,20 @@ namespace Biblioteca_Api.Controllers
             return new UserToken()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
+                Expiration = expiration,
+                RolName = roles[0]
             };
         }
         [HttpPost("AsignarUsuarioRol")]
         public async Task<ActionResult> AsignarRolUsuario(EditarRolDTO editarRolDTO)
         {
-            var usuario = await _userManager.FindByIdAsync(editarRolDTO.UsuarioId.ToString());
+            Users user = new Users(_userManager);
+            string res = await user.AsignarRolUsuario(editarRolDTO);
 
-            if (usuario == null)
+            if (!res.Equals("Ok"))
             {
-                return NotFound();
+                return BadRequest("Error asignando rol a usuario");
             }
-
-            await _userManager.AddClaimAsync(usuario, new Claim(ClaimTypes.Role, editarRolDTO.NombreRol));
-            await _userManager.AddToRoleAsync(usuario, editarRolDTO.NombreRol);
             return Ok();
         }
 

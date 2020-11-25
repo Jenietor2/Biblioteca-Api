@@ -19,7 +19,7 @@ namespace Biblioteca_Api.DTOs
         public bool Activo { get; set; } = true;
         public int GeneroId { get; set; }
         public GeneroDTO Genero { get; set; }
-        public int UsuarioID { get; set; }
+        public string UsuarioID { get; set; }
         public Usuario Usuario { get; set; }
         [Required]
         public string Ruta { get; set; }

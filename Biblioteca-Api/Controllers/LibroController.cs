@@ -3,14 +3,13 @@ using Biblioteca_Api.Data;
 using Biblioteca_Api.DTOs;
 using Biblioteca_Api.Models;
 using Biblioteca_Api.Servicios;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Biblioteca_Api.Controllers
@@ -31,12 +30,15 @@ namespace Biblioteca_Api.Controllers
             this.almacenador = almacenador;
         }
         [HttpGet]
-        public async Task<ActionResult<List<LibroDTO>>> Get()
+        public async Task<ActionResult<List<Libro>>> Get()
         {
-            List<Libro> lstLibro = await context.Libros.Where(x => x.Activo).ToListAsync();
-            List<LibroDTO> lstLibroDto = mapper.Map<List<LibroDTO>>(lstLibro);
+            List<Libro> lstLibro = await context.Libros.Where(x => x.Activo)
+                .Include(x => x.Genero)
+                .Include(x => x.Usuario)
+                .ToListAsync();
+            //List<LibroDTO> lstLibroDto = mapper.Map<List<LibroDTO>>(lstLibro);
 
-            return lstLibroDto;
+            return lstLibro;
         }
 
         [HttpGet("{id:int}", Name = "obtenerLibro")]
@@ -105,6 +107,7 @@ namespace Biblioteca_Api.Controllers
         }
 
         [HttpPut("eliminar/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<ActionResult> Eliminacion(int id)
         {
             Libro libro = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.Activo);

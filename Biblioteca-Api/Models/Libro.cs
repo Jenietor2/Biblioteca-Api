@@ -17,7 +17,7 @@ namespace Biblioteca_Api.Models
         public bool Activo { get; set; } = true;
         public int GeneroId { get; set; }
         public Genero Genero { get; set; }
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
         [Required]
         public string Ruta { get; set; }
