@@ -43,7 +43,7 @@ namespace Biblioteca_Api.Controllers
         }
 
         [HttpGet("{id}", Name = "obtenerUsuario")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Usuario>> Get(string id)
         {
             Usuario usuario = await context.Usuarios.FirstOrDefaultAsync(x => x.Id.Equals(id) && x.Activo == true);
@@ -68,7 +68,7 @@ namespace Biblioteca_Api.Controllers
         }
 
         [HttpPut("actualizar/{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Put(string id, [FromBody] UsuarioActualizacion usuarioActualizacion)
         {
             var usuarioBD = await context.Usuarios.FirstOrDefaultAsync(x => x.Id.Equals(id));

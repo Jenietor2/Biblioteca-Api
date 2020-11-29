@@ -35,37 +35,46 @@ namespace Biblioteca_Api.Controllers
         [HttpPost("Crear")]
         public async Task<ActionResult<UserToken>> CreateUser([FromBody] Usuario model)
         {
-            model.UserName = model.Email;
-            model.Activo = model.Activo ? model.Activo : true;
-            model.FechaCreacion = model.FechaCreacion <= DateTime.MinValue ? DateTime.Now : model.FechaCreacion;
-
-            var result = await _userManager.CreateAsync(model, model.Password);
-
-            if (result.Succeeded)
+            try
             {
-                UsuarioLogin usuarioLogin = new UsuarioLogin
+                model.Id = string.IsNullOrEmpty(model.Id) ? Guid.NewGuid().ToString() : model.Id;
+                model.UserName = string.IsNullOrEmpty(model.UserName) ? model.UserName = model.Email : model.UserName;
+                model.Activo = model.Activo ? model.Activo : true;
+                model.FechaCreacion = model.FechaCreacion <= DateTime.MinValue ? DateTime.Now : model.FechaCreacion;
+
+                var result = await _userManager.CreateAsync(model, model.Password);
+
+                if (result.Succeeded)
                 {
-                    Email = model.Email,
-                    Password = model.Password
-                };
+                    UsuarioLogin usuarioLogin = new UsuarioLogin
+                    {
+                        Email = model.Email,
+                        Password = model.Password
+                    };
 
-                EditarRolDTO editRolDTO = new EditarRolDTO {
-                    UsuarioId = model.Id,
-                    NombreRol = _configuration["RolDefault"].ToString()
-                };
+                    EditarRolDTO editRolDTO = new EditarRolDTO
+                    {
+                        UsuarioId = model.Id,
+                        NombreRol = _configuration["RolDefault"].ToString()
+                    };
 
-                Users user = new Users(_userManager);
-                await user.AsignarRolUsuario(editRolDTO);
+                    Users user = new Users(_userManager);
+                    await user.AsignarRolUsuario(editRolDTO);
 
-                List<string> lstRols = new List<string>();
-                lstRols.Add(editRolDTO.NombreRol);
-                return BuildToken(usuarioLogin, lstRols);
+                    List<string> lstRols = new List<string>();
+                    lstRols.Add(editRolDTO.NombreRol);
+                    return BuildToken(usuarioLogin, lstRols);
+                }
+                else
+                {
+                    return BadRequest("Username or password invalid");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Username or password invalid");
-            }
 
+                throw;
+            }
         }
 
 
@@ -93,10 +102,13 @@ namespace Biblioteca_Api.Controllers
 
         private UserToken BuildToken(UsuarioLogin usuarioLogin, IList<string> roles)
         {
+            var usuario = _userManager.FindByEmailAsync(usuarioLogin.Email);
+
             var claims = new List<Claim>
             {
         new Claim(ClaimTypes.Name, usuarioLogin.Email),
-        new Claim(ClaimTypes.Email, usuarioLogin.Email)
+        new Claim(ClaimTypes.Email, usuarioLogin.Email),
+        new Claim(ClaimTypes.NameIdentifier, usuario.Result.Id)
     };
 
             foreach (var rol in roles)
@@ -121,7 +133,8 @@ namespace Biblioteca_Api.Controllers
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration,
-                RolName = roles[0]
+                RolName = roles[0],
+                UsuarioId = usuario.Result.Id
             };
         }
         [HttpPost("AsignarUsuarioRol")]

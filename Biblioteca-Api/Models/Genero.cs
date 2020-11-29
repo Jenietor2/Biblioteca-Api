@@ -14,5 +14,7 @@ namespace Biblioteca_Api.Models
         public string Nombre { get; set; }
         public List<Libro> Libros { get; set; }
         public bool Activo { get; set; } = true;
+
+        public string Detalle { get; set; }
     }
 }

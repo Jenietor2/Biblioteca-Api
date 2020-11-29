@@ -107,7 +107,7 @@ namespace Biblioteca_Api.Controllers
         }
 
         [HttpPut("eliminar/{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<ActionResult> Eliminacion(int id)
         {
             Libro libro = await context.Libros.FirstOrDefaultAsync(x => x.Id == id && x.Activo);

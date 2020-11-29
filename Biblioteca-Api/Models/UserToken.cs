@@ -10,5 +10,6 @@ namespace Biblioteca_Api.Models
         public string Token { get; set; }
         public DateTime Expiration { get; set; }
         public string RolName { get; set; }
+        public string UsuarioId { get; set; }
     }
 }
